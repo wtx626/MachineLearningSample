@@ -5,11 +5,10 @@
 # @File    : postgradu_admit.py
 # @Software: PyCharm
 import pandas as pd
-import statsmodels.api as sm
-import matplotlib as plt
-import pylab as pl
 import numpy as np
 from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import classification_report
+from sklearn.metrics import confusion_matrix
 
 # 读取数据集
 train_data = pd.read_csv("dataset/lr-binary.csv")
@@ -44,6 +43,11 @@ data_test = test_data[cols_to_keep_test].join(dummy_ranks.ix[:, 'rank_2':])
 data_test['intercept'] = 1.0
 test_X = data_test[data_test.columns[0:]]
 
-test_Y = lr.predict(test_X)
+test_Y = test_data['admit']
+predict_test_Y = lr.predict(test_X)
 
-print(test_Y)
+print(confusion_matrix(test_Y, predict_test_Y, labels=[0, 1]))
+# 利用逻辑斯蒂回归自带的评分函数score获得模型在测试集上的准确定结果
+print '精确率为：', lr.score(test_X, test_Y)
+
+print classification_report(test_Y, predict_test_Y, labels=[0, 1], target_names=['not_admit', 'admit'])

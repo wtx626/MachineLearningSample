@@ -41,7 +41,7 @@ dummy_test_ranks = pd.get_dummies(test_data['rank'], prefix='rank')
 # 除gre、gpa外，加入了上面常见的虚拟变量（注意，引入的虚拟变量列数应为虚拟变量总列数减1，减去的1列作为基准）
 cols_to_keep_test = ['gre', 'gpa']
 data_test = test_data[cols_to_keep_test].join(dummy_ranks.ix[:, 'rank_2':])
-
+data_test['intercept'] = 1.0
 test_X = data_test[data_test.columns[0:]]
 
 test_Y = lr.predict(test_X)
